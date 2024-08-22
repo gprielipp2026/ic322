@@ -13,6 +13,6 @@ with open("words.txt", "r") as fh:
 # make it flat (key,pair)
 words = [x for x in words.items()]
 # sort based on pair
-words.sort(reverse=True, key=lambda x: x[1])
-for word, count in words[:5]:
+words.sort(reverse=False, key=lambda x: x[1])
+for word, count in words[-1:-6:-1]:
     print(word + ": " + str(count))
