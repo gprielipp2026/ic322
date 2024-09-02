@@ -1,15 +1,16 @@
-from request import Request
-from body import Body
-from header import Header
-from startline import Startline
-
-#from response import Response
+from .request import Request
+from .body import Body
+from .header import Header
+from .requestline import Requestline 
+from .status import Status
+from .response import Response
 
 class HttpParser:
     def __init__(self):
         self.state = 0 
+        self.endpoints = []
 
-    def startline(self, reqLine, request):
+    def requestline(self, reqLine, request):
         """
         start-line = Request-Line | Status-Line
         #note: should be a request line in this method
@@ -22,7 +23,7 @@ class HttpParser:
         target = reqObjs[1]
         version = reqObjs[2]
 
-        request.setStartline(Startline(method, target, version))
+        request.setStartline(Requestline(method, target, version))
 
         self.state += 1 
 
@@ -41,8 +42,7 @@ class HttpParser:
             # no more headers to read
             if reqObj == '':
                 break
-
-            name, value = reqObj.split(":")
+            name, value = (reqObj[:reqObj.find(":")], reqObj[reqObj.find(':')+1:])
             request.addHeader(Header(name, value))
 
         self.state += 1
@@ -83,7 +83,7 @@ class HttpParser:
             3 - done
         """
         self.state = 0
-        funcs = [self.startline, self.headers, self.body]
+        funcs = [self.requestline, self.headers, self.body]
 
         reqLines = reqstr.split("\r\n")[:-1]
 
@@ -97,4 +97,14 @@ class HttpParser:
     generates a response for the server to send
     """
     def genResponse(self, request):
-        pass
+        for endpoint in self.endpoints:
+            if endpoint.match(request.getMethod(), request.getURI()):
+                return endpoint.handleRequest(request)
+        else:
+            # 404 Not Found
+            resp = Response()
+            resp.setStatus(Status(404))
+            return resp
+
+    def addEndpoint(self, endpoint):
+        self.endpoints.append(endpoint)
