@@ -7,7 +7,7 @@ class Status:
     @staticmethod
     def load( fn):
         with open(fn, "r") as fd:
-            lines = [(int(x[0:4]), x[4:]) for x in fd.readlines()]
+            lines = [(int(x[0:4]), x[4:].strip()) for x in fd.readlines()]
             pairs = {}
             for code, reason in lines:
                 pairs[code] = reason 
