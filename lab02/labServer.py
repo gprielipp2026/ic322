@@ -15,6 +15,7 @@ def error(msg=""):
 def file(req):
     resp = Response()
     resp.setStatus(Status(200))
+    #resp.addHeader(Header("Connection", "close"))
 
     fn = req.getURI()
     # Load content
@@ -34,13 +35,14 @@ def file(req):
         MIME = "text/html"
     elif "js" in fn:
         MIME = "text/javascript"
+        resp.addHeader(Header("Connection", "close"))
     else:
         return error()
 
     # set corresponding headers
     resp.addHeader(Header("Content-Type", MIME))
-    resp.addHeader(Header("Content-Length", len(data)))
-
+    resp.addHeader(Header("Content-Length", len(data.encode())))
+    
     # data to send back
     resp.setBody(Body(data))
 
@@ -49,7 +51,8 @@ def file(req):
 def missing(file):
     resp = Response()
     resp.setStatus(Status(404))
-    
+    resp.addHeader(Header("Connection", "close"))
+
     msg = f'could not find "{file}"'
     resp.addHeader(Header("Content-Type", "text/plain"))
     resp.addHeader(Header("Content-Length", len(msg)))
@@ -66,6 +69,7 @@ def redirect(req):
     resp.setStatus(Status(301))
 
     resp.addHeader(Header("Location", "/index.html"))
+    resp.addHeader(Header("Connection", "close"))
 
     return resp
 

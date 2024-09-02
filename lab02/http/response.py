@@ -19,14 +19,26 @@ class Response:
     def setBody(self, body):
         self.body = body
 
+    def hasHeader(self, key):
+        return self.getHeader(key) != None
+
+    def getHeader(self, key):
+        for header in self.headers:
+            if header.matches(key):
+                return header
+        else:
+            return None
+
     def __str__(self):
         out = str(self.startline) + "\r\n"
         if len(self.headers) > 0:
             out += "\r\n".join([str(x) for x in self.headers]) + "\r\n"
         else:
             out += "\r\n"
+
         if self.body != None:
             out += str(self.body) + "\r\n"
         else:
             out += "\r\n"
+
         return out

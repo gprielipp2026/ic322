@@ -3,4 +3,4 @@ class Body:
         self.data = data
 
     def __str__(self):
-        return f'{self.data}'
+        return str(self.data) 

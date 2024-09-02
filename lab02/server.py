@@ -27,8 +27,8 @@ class Server:
     def serve(parser, clientSD):
         print(f'Client({clientSD.fileno()}) connected')
         while True:
-            reqStr = clientSD.recv(1024).decode()
-            print(f'{reqStr=}\n')
+            reqStr = clientSD.recv(4096).decode()
+            #print(f'{reqStr=}\n')
             # client quit :(
             if len(reqStr) == 0:
                 print(f'Client({clientSD.fileno()}) disconnected')
@@ -41,5 +41,11 @@ class Server:
             print("Server:\n" + str(response))
 
             clientSD.sendall(str(response).encode())
-        
-
+       
+            # if you want to close the connection,
+            # default behavior is persistent connection
+            if response.hasHeader("Connection") and response.getHeader("Connection").getValue() == "close":
+                print(f'Client({clientSD.fileno()}) disconnected')
+                clientSD.close()
+                break
+                
