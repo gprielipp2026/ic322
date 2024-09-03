@@ -28,7 +28,6 @@ class Server:
         print(f'Client({clientSD.fileno()}) connected')
         while True:
             reqStr = clientSD.recv(4096).decode()
-            #print(f'{reqStr=}\n')
             # client quit :(
             if len(reqStr) == 0:
                 print(f'Client({clientSD.fileno()}) disconnected')
@@ -38,7 +37,7 @@ class Server:
             request = parser.requestFrom(reqStr)
             print(f'Client({clientSD.fileno()}):\n{str(request)}')
             response = parser.genResponse(request)
-            print("Server:\n" + str(response))
+            print("Server:\n" + str(response) + "\n" + "-"*20)
 
             clientSD.sendall(str(response).encode())
        

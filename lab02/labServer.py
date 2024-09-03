@@ -12,6 +12,20 @@ def error(msg=""):
     resp.setBody(Body(msg))
     return resp
 
+def clean(data):
+    # remove all whitespace between items and
+    # replace it with SP
+    whitespace = "\r"
+    output = ""
+
+    for char in data:
+        if char in whitespace:
+            output += " "
+        else:
+            output += char
+
+    return output
+
 def file(req):
     resp = Response()
     resp.setStatus(Status(200))
@@ -73,6 +87,10 @@ def redirect(req):
 
     return resp
 
+"""
+This is the actual "server" definition
+the above are helper methods that will get called
+"""
 parser = HttpParser()
 
 # should be able to auto-generate this
@@ -85,5 +103,6 @@ for fn in files:
 # send / to /index.html
 parser.addEndpoint(Endpoint("GET", "/", redirect))
 
+# start the server
 server = Server("", 9999, parser)
 
