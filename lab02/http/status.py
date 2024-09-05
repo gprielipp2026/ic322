@@ -13,6 +13,14 @@ class Status:
                 pairs[code] = reason 
             return pairs
 
+    def tobytes(self):
+        if Status.reasons == None:
+            Status.reasons = Status.load("./http/reasons.txt")
+            #print("Loaded reasons:")
+            #print(Status.reasons)
+
+        return str(self.code).encode() + " ".encode() + Status.reasons[self.code].encode()
+
     def __str__(self):
         if Status.reasons == None:
             Status.reasons = Status.load("./http/reasons.txt")

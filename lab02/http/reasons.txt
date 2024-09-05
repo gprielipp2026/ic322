@@ -14,7 +14,7 @@
 304 Not Modified
 305 Use Proxy
 307 Temporary Redirect
-400 Badd Request
+400 Bad Request
 401 Unauthorized
 402 Payment Required
 403 Forbidden

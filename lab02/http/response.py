@@ -29,17 +29,18 @@ class Response:
         else:
             return None
 
-    def __str__(self):
-        out = str(self.startline) + "\r\n"
+    def tobytes(self):
+        out = self.startline.tobytes() + "\r\n".encode()
         if len(self.headers) > 0:
             #                               for the final header  v       v for the end of the headers
-            out += "\r\n".join([str(x) for x in self.headers]) + "\r\n" + "\r\n"
+            out += "\r\n".join([str(x) for x in self.headers]).encode() + ("\r\n"*2).encode()
         else:
-            out += "\r\n"
+            out += "\r\n".encode()
 
         if self.body != None:
-            out += str(self.body) + "\r\n"
+            out += self.body.tobytes() + "\r\n".encode()
+        
         else:
-            out += "\r\n"
+            out += "\r\n".encode()
 
         return out
