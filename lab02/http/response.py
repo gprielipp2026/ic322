@@ -32,7 +32,8 @@ class Response:
     def __str__(self):
         out = str(self.startline) + "\r\n"
         if len(self.headers) > 0:
-            out += "\r\n".join([str(x) for x in self.headers]) + "\r\n"
+            #                               for the final header  v       v for the end of the headers
+            out += "\r\n".join([str(x) for x in self.headers]) + "\r\n" + "\r\n"
         else:
             out += "\r\n"
 

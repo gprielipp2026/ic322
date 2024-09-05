@@ -16,4 +16,7 @@ class Status:
     def __str__(self):
         if Status.reasons == None:
             Status.reasons = Status.load("./http/reasons.txt")
+            #print("Loaded reasons:")
+            #print(Status.reasons)
+
         return str(self.code) + " " + Status.reasons[self.code]

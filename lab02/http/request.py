@@ -37,11 +37,13 @@ class Request:
     def __str__(self):
         out = str(self.startline) + "\r\n"
         if len(self.headers) > 0:
-            out += "\r\n".join([str(x) for x in self.headers]) + "\r\n"
+            # see response.py for reasoning
+            out += "\r\n".join([str(x) for x in self.headers]) + "\r\n" + "\r\n"
         else:
             out += "\r\n"
         if self.body != None:
             out += str(self.body) + "\r\n"
         else:
             out += "\r\n"
+        
         return out

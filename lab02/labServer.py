@@ -48,7 +48,7 @@ def file(req):
     if "html" in fn:
         MIME = "text/html"
     elif "js" in fn:
-        MIME = "text/javascript"
+        MIME = "application/javascript" #"text/javascript"
         resp.addHeader(Header("Connection", "close"))
     else:
         return error()
