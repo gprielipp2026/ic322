@@ -26,13 +26,13 @@ def clean(data):
 
     return output
 
-def file(req):
+def filetext(req):
     resp = Response()
     resp.setStatus(Status(200))
     #resp.addHeader(Header("Connection", "close"))
 
     fn = req.getURI()
-    # Load content
+    # Load content 
     data = None
     try:
         # this should be customized based on where the server is run
@@ -55,9 +55,46 @@ def file(req):
 
     # set corresponding headers
     resp.addHeader(Header("Content-Type", MIME))
-    resp.addHeader(Header("Content-Length", len(data.encode())))
+    resp.addHeader(Header("Content-Length", len(data)))
     
     # data to send back
+    resp.setBody(Body(data))
+
+    return resp
+
+def unsupported(file):
+    pass
+
+def images(file):
+    resp = Response()
+
+    MIMEType = {
+            'png': 'image/png',
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'svg': 'image/svg+xml',
+            'ico': 'image/x-icon'
+            }
+
+    MIME = ""
+    try:
+        ending = file[file.find('.'):]
+        MIME = MIMEType[ending]
+    except Exception as e:
+        return unsupported(file)
+
+    # load file 
+    data = None
+    try:
+        with open(f'./files/{file}', 'rb') as fd:
+            data = fd.read()
+    except Exception as e:
+        # or try to get it from somewhere else
+        return missing(file)
+
+    resp.setStatus(Status(200))
+    resp.addHeader(Header("Content-Type", MIME))
+    resp.addHeader(Header("Content-Length", len(data)))
     resp.setBody(Body(data))
 
     return resp
@@ -98,7 +135,10 @@ files = ["index.html", "script.js"]
 
 # allow server to send back files
 for fn in files:
-    parser.addEndpoint(Endpoint("GET", f'/{fn}', file))
+    parser.addEndpoint(Endpoint("GET", f'/{fn}', filetext))
+
+for fn in ['favicon.ico']:
+    parser.addEndpoint(Endpoint("GET", f'/{fn}', images))
 
 # send / to /index.html
 parser.addEndpoint(Endpoint("GET", "/", redirect))
