@@ -1,10 +1,10 @@
-from http.httpparser import HttpParser 
+from myclasses.httpparser import HttpParser 
 from Server import Server
-from http.endpoint import Endpoint
-from http.response import Response
-from http.body import Body
-from http.header import Header
-from http.status import Status
+from myclasses.endpoint import Endpoint
+from myclasses.response import Response
+from myclasses.body import Body
+from myclasses.header import Header
+from myclasses.status import Status
 
 def error(msg=""):
     resp = Response()
