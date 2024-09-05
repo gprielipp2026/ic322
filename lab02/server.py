@@ -155,7 +155,6 @@ from os import listdir
 from os.path import isfile, join
 files = [f for f in listdir(base) if isfile(join(base, f))]
 
-print(files)
 for fn in files:
     parser.addEndpoint(Endpoint("GET", f'/{fn}', filehandler))
 
