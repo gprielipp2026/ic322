@@ -15,16 +15,8 @@ class Status:
 
     def tobytes(self):
         if Status.reasons == None:
-            Status.reasons = Status.load("./http/reasons.txt")
+            Status.reasons = Status.load("./myclasses/reasons.txt")
             #print("Loaded reasons:")
             #print(Status.reasons)
 
         return str(self.code).encode() + " ".encode() + Status.reasons[self.code].encode()
-
-    def __str__(self):
-        if Status.reasons == None:
-            Status.reasons = Status.load("./http/reasons.txt")
-            #print("Loaded reasons:")
-            #print(Status.reasons)
-
-        return str(self.code) + " " + Status.reasons[self.code]
