@@ -33,9 +33,9 @@ def login(session):
                 "Languages": ""
                }
     headers = load("loginHeaders.txt")
-    resp = session.get("https://login.usna.edu/oam/server/obrareq.cgi", headers=headers)
+    resp = session.get("https://login.usna.edu/oam/server/obrareq.cgi",  verify=False)
     print(resp.text)
-    resp = session.post(url, headers=headers, data=flatten(payload))
+    resp = session.post(url, data=flatten(payload), verify=False)
     print(BeautifulSoup(resp.text, "html.parser"))
 
 
