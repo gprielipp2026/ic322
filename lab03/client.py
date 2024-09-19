@@ -14,8 +14,8 @@ def flatten(data:dict, sep:str ='&') -> str:
     return sep.join([f'{key}={value}' for key,value in data.items()])
 
 def login(session):
-    uname = "m265112"#input("Username: ")
-    pword = "C0LL3TT3engineer"#getpass.getpass(prompt="Password: ")
+    uname = input("Username: ")
+    pword = getpass.getpass(prompt="Password: ")
 
     url = "https://login.usna.edu/oam/server/auth_cred_submit"
     payload = {

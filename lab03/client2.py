@@ -3,6 +3,8 @@
 from requests import *
 from bs4 import BeautifulSoup
 import json
+import getpass
+import random
 
 def load(fn):
     ret = {}
@@ -17,6 +19,25 @@ def load(fn):
 
 def flatten(data:dict, sep:str ='&') -> str:
     return sep.join([f'{key}={value}' for key,value in data.items()])
+
+def login(session):
+    uname = input("Username: ")
+    pword = getpass.getpass(prompt="Password: ")
+
+    url = "https://login.usna.edu/oam/server/auth_cred_submit"
+    payload = {
+                "username": uname, 
+                "password": pword, 
+                "request_id": str( random.getrandbits(64) ),
+                "displayLangSelection": "false",
+                "Languages": ""
+               }
+    headers = load("loginHeaders.txt")
+    resp = session.get("https://login.usna.edu/oam/server/obrareq.cgi", headers=headers)
+    print(resp.text)
+    resp = session.post(url, headers=headers, data=flatten(payload))
+    print(BeautifulSoup(resp.text, "html.parser"))
+
 
 def getInfo() -> dict:
     isDone = input("Are you done [y/N]? ") or "N"
@@ -47,12 +68,15 @@ def getInfo() -> dict:
 
 def parseResponse(response):
     soup = BeautifulSoup(response.text, "html.parser")
-    print(soup)
+    print(soup.body)
 
 
-reqheaders = load("requestHeaders.txt")
+#reqheaders = load("requestHeaders.txt")
 
 session = Session()
+login(session)
+print()
+
 url = "https://mids.usna.edu/ITSD/mids/drgwq010$mids.actionquery"
 
 while True:
@@ -60,8 +84,10 @@ while True:
     if request['done']:
         break
     del request['done']
-
-    resp = session.post(url, headers=reqheaders, data=flatten(request))
+    
+    print(session.cookies)
+    
+    resp = session.post(url, data=flatten(request))
     parseResponse(resp)
 
 session.close()
