@@ -28,15 +28,14 @@ def login(session):
     payload = {
                 "username": uname, 
                 "password": pword, 
-                "request_id": str( random.getrandbits(64) ),
-                "displayLangSelection": "false",
-                "Languages": ""
                }
     headers = load("loginHeaders.txt")
-    resp = session.get("https://login.usna.edu/oam/server/obrareq.cgi",  verify=False)
+    urlp = "https://login.usna.edu/oam/server/obrareq.cgi?encquery%3DfXBQdQKV%2BxOYnlMtZpxHa%2F1m%2FK6f1PK7QGGfHDmPsDUnpW4iSBciF%2Fn9Ljsecs4Ien3I4miu9ZOHqBkqML0Cz0k1UBak7HU3zWb5qJ6Kdf4ke%2FRDzlqg47JDSbpSlWXhfq8IsC%2B8C48LbpYzF%2FWCKyqhhwW6UFAjqWKoT6%2FGnmWxhl4WKKueVk%2BeeZ7pgSSrcKUPvdv6ls7DWd6mubwOiKfrcgW9jG5F%2BztbUPt4kYcxa%2BlpRlYpVijynSyEW1mOnmJGniW2rKsBX%2B%2F62ogORQ%3D%3D%20agentid%3DUSNA_OHS12c_WebGateAgent%20ver%3D1%20crmethod%3D2"
+    resp = session.post(urlp,
+                        data=flatten(payload), verify=False)
     print(resp.text)
-    resp = session.post(url, data=flatten(payload), verify=False)
-    print(BeautifulSoup(resp.text, "html.parser"))
+    #resp = session.post(url, data=flatten(payload), verify=False)
+    #print(BeautifulSoup(resp.text, "html.parser"))
 
 
 def getInfo() -> dict:

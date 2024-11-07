@@ -1,0 +1,3 @@
+[submodule "protocol-pioneer"]
+	path = protocol-pioneer
+	url = https://gitlab.com/jldowns-usna/protocol-pioneer
